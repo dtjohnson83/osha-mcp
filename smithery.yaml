@@ -1,3 +1,5 @@
+name: OSHA Compliance MCP
+description: Query OSHA safety standards (29 CFR 1910 & 1926) with plain-English summaries. Covers fall protection, PPE requirements, penalty info, and more.
 startCommand:
   type: stdio
   configSchema:
@@ -15,7 +17,7 @@ startCommand:
   commandFunction: |-
     (config) => ({
       command: "node",
-      args: ["dist/index.js"],
+      args: ["dist-server/index.js"],
       env: {
         SUPABASE_URL: config.SUPABASE_URL,
         SUPABASE_ANON_KEY: config.SUPABASE_ANON_KEY

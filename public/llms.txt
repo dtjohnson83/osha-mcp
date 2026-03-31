@@ -1,0 +1,89 @@
+# OSHA Compliance MCP Server
+
+Pay-per-call API for OSHA safety regulation lookups.
+
+## Endpoint
+
+```
+POST https://osha-mcp.vercel.app/api/lookup
+```
+
+## Authentication
+
+This endpoint requires payment via x402 protocol. Include the payment header:
+- `x402-payment: <payment>`
+- Price: $0.01 per call
+
+Without payment, returns HTTP 402 with payment instructions.
+
+## Tools
+
+### lookup_standard
+Search OSHA standards by topic, keyword, or standard number.
+
+```json
+{
+  "tool": "lookup_standard",
+  "query": "fall protection"
+}
+```
+
+Response includes: standard_number, title, subpart, scope, plain_summary, key_requirements, ppe_requirements, ecfr_url.
+
+### get_ppe_requirements
+Get required PPE for a task or hazard.
+
+```json
+{
+  "tool": "get_ppe_requirements",
+  "query": "overhead welding"
+}
+```
+
+### get_penalty_info
+Get current OSHA penalty amounts by violation type.
+
+```json
+{
+  "tool": "get_penalty_info",
+  "violation_type": "serious"
+}
+```
+
+Violation types: serious, other_than_serious, willful, repeat, failure_to_abate, posting_requirements, all.
+
+### check_applicability
+Determine which OSHA standards apply to an industry or task.
+
+```json
+{
+  "tool": "check_applicability",
+  "query": "residential construction"
+}
+```
+
+### get_standard_text
+Get full regulatory text for a specific standard.
+
+```json
+{
+  "tool": "get_standard_text",
+  "standard_number": "1910.134"
+}
+```
+
+## Coverage
+
+- 29 CFR 1910 (General Industry): 188 standards
+- 29 CFR 1926 (Construction): 291 standards
+- 479 total standards with plain-English summaries
+
+## Pricing
+
+$0.01 per API call via x402 protocol (Base network).
+
+Receiving wallet: 0x0b55C77eDC2592e38eBd008F82Cce694d3c49475
+
+## Disclaimer
+
+This tool is for informational purposes only and does not constitute legal advice. Always verify requirements with official OSHA sources at osha.gov.

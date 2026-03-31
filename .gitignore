@@ -9,3 +9,4 @@ dist-server
 
 # Production env (contains secrets)
 .env.production
+.env
