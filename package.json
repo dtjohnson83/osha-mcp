@@ -1,30 +1,34 @@
 {
-  "name": "osha-mcp",
+  "name": "osha-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for OSHA compliance and safety data",
-  "main": "dist/mcp/index.js",
+  "description": "MCP server for OSHA compliance lookups - 29 CFR 1910 & 1926",
   "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "osha-mcp-server": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
-    "dev": "next dev",
-    "start": "next start",
-    "lint": "next lint",
-    "mcp:stdio": "node dist/mcp/index.js"
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "ingest": "tsx scripts/ingest-standards.ts",
+    "summarize": "tsx scripts/generate-summaries.ts",
+    "seed-penalties": "tsx scripts/seed-penalties.ts",
+    "validate": "tsx scripts/validate-data.ts",
+    "setup-db": "tsx scripts/setup-db.ts"
   },
-  "keywords": ["osha", "mcp", "compliance", "safety"],
-  "author": "Dan Johnson",
+  "keywords": ["osha", "safety", "compliance", "mcp"],
+  "author": "DANZUS Holdings LLC",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "@supabase/supabase-js": "^2.0.0",
-    "next": "^15.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@supabase/supabase-js": "^2.101.0",
+    "dotenv": "^17.3.1",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
   }
 }

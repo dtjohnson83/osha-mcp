@@ -1,0 +1,23 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      SUPABASE_URL:
+        type: string
+        description: "Supabase project URL"
+      SUPABASE_ANON_KEY:
+        type: string
+        description: "Supabase anonymous key"
+    required:
+      - SUPABASE_URL
+      - SUPABASE_ANON_KEY
+  commandFunction: |-
+    (config) => ({
+      command: "node",
+      args: ["dist/index.js"],
+      env: {
+        SUPABASE_URL: config.SUPABASE_URL,
+        SUPABASE_ANON_KEY: config.SUPABASE_ANON_KEY
+      }
+    })

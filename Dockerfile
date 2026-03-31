@@ -1,0 +1,8 @@
+FROM node:20-slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --production
+COPY dist ./dist
+COPY smithery.yaml ./
+ENV NODE_ENV=production
+CMD ["node", "dist/index.js"]
