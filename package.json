@@ -1,0 +1,30 @@
+{
+  "name": "osha-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for OSHA compliance and safety data",
+  "main": "dist/mcp/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "next dev",
+    "start": "next start",
+    "lint": "next lint",
+    "mcp:stdio": "node dist/mcp/index.js"
+  },
+  "keywords": ["osha", "mcp", "compliance", "safety"],
+  "author": "Dan Johnson",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.0.0"
+  }
+}
