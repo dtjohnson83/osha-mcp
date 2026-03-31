@@ -1,0 +1,67 @@
+{
+  "serverInfo": {
+    "name": "OSHA Compliance MCP",
+    "version": "1.0.0",
+    "description": "Query 479 OSHA safety standards (29 CFR 1910 & 1926) with plain-English summaries. Covers fall protection, PPE requirements, penalty amounts, and more."
+  },
+  "authentication": {
+    "required": false
+  },
+  "tools": [
+    {
+      "name": "lookup_standard",
+      "description": "Search OSHA safety standards by topic, keyword, hazard, or standard number (e.g., 'fall protection', '1926.501', 'confined space', 'respirator'). Returns plain-English summaries with official citations.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Search term: topic, keyword, hazard, or standard number" },
+          "scope": { "type": "string", "description": "Filter by scope", "enum": ["general_industry", "construction", "both"], "default": "both" }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "get_ppe_requirements",
+      "description": "Get required Personal Protective Equipment (PPE) for a specific work task or hazard, with OSHA standard citations.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task": { "type": "string", "description": "Description of the work task" }
+        },
+        "required": ["task"]
+      }
+    },
+    {
+      "name": "get_penalty_info",
+      "description": "Get current OSHA penalty amounts by violation type (serious, willful, repeat, other-than-serious, failure-to-abate, posting requirements).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "violation_type": { "type": "string", "description": "Type of violation, or 'all' for complete schedule", "default": "all" }
+        }
+      }
+    },
+    {
+      "name": "check_applicability",
+      "description": "Determine which OSHA standards apply to a specific industry, task, or work scenario.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "industry": { "type": "string", "description": "Industry description (e.g., 'commercial construction', 'manufacturing')" },
+          "task": { "type": "string", "description": "Specific task (e.g., 'trenching and excavation', 'spray painting')" }
+        }
+      }
+    },
+    {
+      "name": "get_standard_text",
+      "description": "Get the full regulatory text of a specific OSHA standard by its number (e.g., '1910.134', '1926.501').",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "standard_number": { "type": "string", "description": "OSHA standard number (e.g., '1910.134', '1926.501')" }
+        },
+        "required": ["standard_number"]
+      }
+    }
+  ]
+}

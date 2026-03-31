@@ -169,7 +169,7 @@ async function handleToolCall(name: string, arguments_: Record<string, unknown> 
   }
 }
 
-// GET - List tools (for MCP discovery)
+// GET - List tools (for MCP discovery - no payment required)
 export async function GET() {
   return NextResponse.json({
     jsonrpc: '2.0',
@@ -177,32 +177,45 @@ export async function GET() {
   })
 }
 
-// POST - Call tool
+// POST - Call tool (requires payment via x402)
 export async function POST(request: NextRequest) {
-  const x402Payment = request.headers.get('x402-payment')
-  
-  if (!x402Payment) {
-    return new NextResponse('Payment Required: $0.01 per lookup via x402', {
-      status: 402,
-      headers: {
-        'Content-Type': 'text/plain',
-        'Accept-Payment': 'exact $0.01@eip155:8453',
-        'X-402-Price': '$0.01',
-        'X-402-Network': 'eip155:8453',
-        'X-402-Pay-To': RECEIVING_ADDRESS
-      }
-    })
-  }
-
   try {
     const body = await request.json()
     const { method, params, id } = body
 
-    if (method === 'tools/list') {
+    // Discovery and initialization methods don't require payment
+    if (method === 'initialize') {
+      return NextResponse.json({
+        jsonrpc: '2.0',
+        id,
+        result: {
+          protocolVersion: '2024-11-05',
+          serverInfo: { name: 'osha-mcp', version: '1.0.0' },
+          capabilities: { tools: {} }
+        }
+      })
+    }
+    
+    if (method === 'tools/list' || method === 'ping') {
       return NextResponse.json({
         jsonrpc: '2.0',
         id,
         result: { tools }
+      })
+    }
+
+    // All other methods require x402 payment
+    const x402Payment = request.headers.get('x402-payment')
+    if (!x402Payment) {
+      return new NextResponse('Payment Required: $0.01 per lookup via x402', {
+        status: 402,
+        headers: {
+          'Content-Type': 'text/plain',
+          'Accept-Payment': 'exact $0.01@eip155:8453',
+          'X-402-Price': '$0.01',
+          'X-402-Network': 'eip155:8453',
+          'X-402-Pay-To': RECEIVING_ADDRESS
+        }
       })
     }
 
