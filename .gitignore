@@ -3,3 +3,9 @@ node_modules
 dist
 .next
 .vercel
+
+# Server build
+dist-server
+
+# Production env (contains secrets)
+.env.production

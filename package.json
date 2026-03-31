@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "MCP server for OSHA compliance lookups - 29 CFR 1910 & 1926",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist-server/index.js",
   "bin": {
-    "osha-mcp-server": "dist/index.js"
+    "osha-mcp-server": "dist-server/index.js"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "build": "rm -rf .next && tsc -p tsconfig.server.json && next build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:web": "next build",
+    "start": "node dist-server/index.js",
     "dev": "tsx src/index.ts",
+    "dev:web": "next dev",
     "ingest": "tsx scripts/ingest-standards.ts",
     "summarize": "tsx scripts/generate-summaries.ts",
     "seed-penalties": "tsx scripts/seed-penalties.ts",
@@ -24,10 +27,15 @@
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@supabase/supabase-js": "^2.101.0",
     "dotenv": "^17.3.1",
+    "next": "^16.2.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
