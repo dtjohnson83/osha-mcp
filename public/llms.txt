@@ -1,89 +1,69 @@
 # OSHA Compliance MCP Server
 
-Pay-per-call API for OSHA safety regulation lookups.
+Pay-per-call API for OSHA safety regulation lookups. Uses AI-generated plain-English summaries from official eCFR text.
+
+**Price:** $0.01 per call via x402 (Base network)
+**Wallet:** 0x0b55C77eDC2592e38eBd008F82Cce694d3c49475
+**Standards:** 479 (188 General Industry + 291 Construction)
+**Data:** Last updated 2026-03-31. Penalty data current as of 2026-01-15.
 
 ## Endpoint
 
 ```
 POST https://osha-mcp.vercel.app/api/lookup
+GET https://osha-mcp.vercel.app/api/mcp  (tool discovery)
 ```
-
-## Authentication
-
-This endpoint requires payment via x402 protocol. Include the payment header:
-- `x402-payment: <payment>`
-- Price: $0.01 per call
-
-Without payment, returns HTTP 402 with payment instructions.
 
 ## Tools
 
 ### lookup_standard
-Search OSHA standards by topic, keyword, or standard number.
+Search OSHA standards by topic, keyword, hazard, or standard number.
 
-```json
-{
-  "tool": "lookup_standard",
-  "query": "fall protection"
-}
-```
+Examples:
+- "fall protection for roofing work"
+- "respiratory protection in manufacturing"  
+- "1926.501"
+- "confined space entry requirements"
+- "electrical safety in construction"
 
-Response includes: standard_number, title, subpart, scope, plain_summary, key_requirements, ppe_requirements, ecfr_url.
+Response includes: standard_number, title, plain_summary (AI-generated), key_requirements, ppe_requirements, ecfr_url.
 
 ### get_ppe_requirements
 Get required PPE for a task or hazard.
 
-```json
-{
-  "tool": "get_ppe_requirements",
-  "query": "overhead welding"
-}
-```
+Examples:
+- task: "overhead welding"
+- task: "trenching 6 feet deep"
+- task: "spray painting in enclosed space"
 
 ### get_penalty_info
-Get current OSHA penalty amounts by violation type.
-
-```json
-{
-  "tool": "get_penalty_info",
-  "violation_type": "serious"
-}
-```
+Current OSHA penalty amounts by violation type.
 
 Violation types: serious, other_than_serious, willful, repeat, failure_to_abate, posting_requirements, all.
 
-### check_applicability
-Determine which OSHA standards apply to an industry or task.
+Penalty amounts updated annually (last update: 2026-01-15).
 
-```json
-{
-  "tool": "check_applicability",
-  "query": "residential construction"
-}
-```
+### check_applicability
+Determine which standards apply to an industry or task.
+
+Examples:
+- task: "scaffolding over 6 feet"
+- industry: "residential construction"
+- task: "forklift operation in warehouse"
 
 ### get_standard_text
-Get full regulatory text for a specific standard.
+Get full regulatory text by standard number.
 
-```json
-{
-  "tool": "get_standard_text",
-  "standard_number": "1910.134"
-}
-```
+Examples:
+- standard_number: "1910.134" (respiratory protection)
+- standard_number: "1926.501" (fall protection in construction)
 
 ## Coverage
 
 - 29 CFR 1910 (General Industry): 188 standards
 - 29 CFR 1926 (Construction): 291 standards
-- 479 total standards with plain-English summaries
-
-## Pricing
-
-$0.01 per API call via x402 protocol (Base network).
-
-Receiving wallet: 0x0b55C77eDC2592e38eBd008F82Cce694d3c49475
+- Full text + AI summaries for all standards
 
 ## Disclaimer
 
-This tool is for informational purposes only and does not constitute legal advice. Always verify requirements with official OSHA sources at osha.gov.
+This tool uses AI-generated summaries and does not constitute legal advice. Always verify requirements with official OSHA sources at osha.gov.

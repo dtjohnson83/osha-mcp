@@ -53,11 +53,11 @@ async function supabaseRpc(functionName: string, params: Record<string, unknown>
 const tools = [
   {
     name: 'lookup_standard',
-    description: 'Search OSHA safety standards by topic, keyword, hazard, or standard number (e.g., "fall protection", "1926.501", "confined space", "respirator"). Returns plain-English summaries with official citations. Covers 29 CFR 1910 (General Industry) and 1926 (Construction).',
+    description: 'Search OSHA safety standards by topic, keyword, hazard, or standard number. Returns AI-generated plain-English summaries with official eCFR citations. Covers 29 CFR 1910 (General Industry) and 1926 (Construction). Examples: "fall protection for roofing", "respiratory protection in manufacturing", "1926.501".',
     inputSchema: {
       type: 'object',
       properties: {
-        query: { type: 'string', description: 'Search term: topic, keyword, hazard, or standard number' },
+        query: { type: 'string', description: 'Search term: topic, keyword, hazard, or standard number. Examples: "fall protection", "confined space entry", "electrical safety", "1926.501"' },
         scope: { type: 'string', description: 'Filter by scope', enum: ['general_industry', 'construction', 'both'], default: 'both' }
       },
       required: ['query']
@@ -86,13 +86,14 @@ const tools = [
   },
   {
     name: 'check_applicability',
-    description: 'Determine which OSHA standards apply to a specific industry, task, or work scenario.',
+    description: 'Determine which OSHA standards apply to a specific industry, task, or work scenario. Examples: industry="residential construction", task="scaffolding over 6 feet".',
     inputSchema: {
       type: 'object',
       properties: {
-        industry: { type: 'string', description: 'Industry description (e.g., "commercial construction", "manufacturing")' },
-        task: { type: 'string', description: 'Specific task (e.g., "trenching and excavation", "spray painting")' }
-      }
+        industry: { type: 'string', description: 'Industry description (e.g., "commercial construction", "automotive manufacturing")' },
+        task: { type: 'string', description: 'Specific task (e.g., "trenching 5 feet deep", "overhead welding", "forklift operation")' }
+      },
+      required: ['task']
     }
   },
   {

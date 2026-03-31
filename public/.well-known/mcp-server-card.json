@@ -2,10 +2,22 @@
   "serverInfo": {
     "name": "OSHA Compliance MCP",
     "version": "1.0.0",
-    "description": "Query 479 OSHA safety standards (29 CFR 1910 & 1926) with plain-English summaries. Covers fall protection, PPE requirements, penalty amounts, and more."
+    "description": "Query 479 OSHA safety standards (29 CFR 1910 & 1926) with AI-generated plain-English summaries. Covers fall protection, PPE requirements, penalty amounts, and more."
   },
   "authentication": {
     "required": false
+  },
+  "pricing": {
+    "type": "pay_per_use",
+    "amount": 0.01,
+    "currency": "USD",
+    "network": "eip155:8453"
+  },
+  "metadata": {
+    "standardsLastUpdated": "2026-03-31",
+    "penaltyDataCurrent": "2026-01-15",
+    "dataSource": "U.S. Department of Labor eCFR",
+    "rateLimits": "None"
   },
   "tools": [
     {
