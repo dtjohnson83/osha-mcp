@@ -18,7 +18,7 @@ const supabase = createClient(
 );
 
 const ECFR_BASE = "https://www.ecfr.gov";
-const TODAY = new Date().toISOString().split("T")[0];
+const TODAY = "2026-03-27";
 
 interface ECFRSection {
   identifier: string;
