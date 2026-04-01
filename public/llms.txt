@@ -1,8 +1,9 @@
 # OSHA Compliance MCP Server
 
-Pay-per-call API for OSHA safety regulation lookups. Uses AI-generated plain-English summaries from official eCFR text.
+AI-native API for OSHA safety regulation lookups. 479 standards with plain-English summaries, real common violations, and proper citation formatting — built for agents.
 
-**Price:** $0.01 per call via x402 (Base network)
+**Free tier:** 3 lookups/day per IP (no auth required)
+**Paid tier:** $0.01/call via x402 on Base L2
 **Wallet:** 0x0b55C77eDC2592e38eBd008F82Cce694d3c49475
 **Standards:** 479 (188 General Industry + 291 Construction)
 **Data:** Last updated 2026-03-31. Penalty data current as of 2026-01-15.
@@ -11,25 +12,43 @@ Pay-per-call API for OSHA safety regulation lookups. Uses AI-generated plain-Eng
 
 ```
 POST https://osha-mcp.vercel.app/api/lookup
-GET https://osha-mcp.vercel.app/api/mcp  (tool discovery)
+GET  https://osha-mcp.vercel.app/api/lookup   (info + quota status)
 ```
+
+## Free Tier
+
+Send any POST request without an x402 header. You get 3 free lookups per IP per day. No registration required. When your free quota is exhausted, add an x402 payment header to continue.
+
+## Authentication
+
+**Free (3/day):** No authentication needed.
+**Paid:** Include `x402-payment: <signature>` header. Learn more at https://pay.chipper.xyz
 
 ## Tools
 
 ### lookup_standard
-Search OSHA standards by topic, keyword, hazard, or standard number.
+Search OSHA standards by topic, keyword, hazard, or exact standard number.
 
 Examples:
-- "fall protection for roofing work"
-- "respiratory protection in manufacturing"  
-- "1926.501"
-- "confined space entry requirements"
-- "electrical safety in construction"
+- query: "fall protection for roofing work"
+- query: "respiratory protection in manufacturing"
+- query: "1926.501" (exact standard lookup)
+- query: "confined space entry requirements"
+- query: "welding fumes and ventilation"
 
-Response includes: standard_number, title, plain_summary (AI-generated), key_requirements, ppe_requirements, ecfr_url.
+Response includes: standard_number, title, subpart, scope, plain_summary, key_requirements, ppe_requirements, common_violations, ecfr_url.
+
+### format_citation
+Format a standard number into proper legal citation format.
+
+Examples:
+- standard_number: "1926.501"
+- standard_number: "1910.134"
+
+Returns: { formatted, short, full, url }
 
 ### get_ppe_requirements
-Get required PPE for a task or hazard.
+Get required PPE for a specific task or hazard.
 
 Examples:
 - task: "overhead welding"
@@ -41,29 +60,38 @@ Current OSHA penalty amounts by violation type.
 
 Violation types: serious, other_than_serious, willful, repeat, failure_to_abate, posting_requirements, all.
 
-Penalty amounts updated annually (last update: 2026-01-15).
-
 ### check_applicability
-Determine which standards apply to an industry or task.
+Determine which OSHA standards apply to an industry or task.
 
 Examples:
 - task: "scaffolding over 6 feet"
-- industry: "residential construction"
-- task: "forklift operation in warehouse"
+- industry: "commercial construction"
+- naics_code: "236220"
 
 ### get_standard_text
-Get full regulatory text by standard number.
+Get full regulatory text + summary for a specific standard.
 
 Examples:
-- standard_number: "1910.134" (respiratory protection)
-- standard_number: "1926.501" (fall protection in construction)
+- standard_number: "1910.134"
+- standard_number: "1926.501"
 
 ## Coverage
 
 - 29 CFR 1910 (General Industry): 188 standards
 - 29 CFR 1926 (Construction): 291 standards
-- Full text + AI summaries for all standards
+- Common violations: Based on OSHA enforcement data
+- Full text + plain-English summaries for all standards
+
+## Example Request
+
+```json
+POST https://osha-mcp.vercel.app/api/lookup
+{
+  "tool": "lookup_standard",
+  "query": "welding respiratory protection"
+}
+```
 
 ## Disclaimer
 
-This tool uses AI-generated summaries and does not constitute legal advice. Always verify requirements with official OSHA sources at osha.gov.
+AI-generated summaries are for reference only and do not constitute legal advice. Verify requirements with official OSHA sources at osha.gov. Standards may have been amended since last update.
