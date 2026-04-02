@@ -1,5 +1,19 @@
 name: OSHA Compliance MCP
-description: Query OSHA safety standards (29 CFR 1910 & 1926) with plain-English summaries. Covers fall protection, PPE requirements, penalty info, and more.
+description: Query OSHA safety standards (29 CFR 1910 & 1926) with plain-English summaries. Built for AI agents and compliance software developers.
+
+Tools:
+- lookup_osha_standard: Search OSHA standards by topic, keyword, or section number
+- get_osha_requirements: Key requirements for a specific standard
+- get_penalty_info: OSHA penalty amounts by violation type
+- get_ppe_requirements: PPE requirements by task/hazard
+- check_applicability: Which standards apply to an industry or task
+- get_osha_citations: Full regulatory text and official citations
+
+Data: 479 OSHA standards across 29 CFR 1910 (General Industry) and 1926 (Construction), with plain-English summaries, key requirements, and violation codes.
+
+Use cases: Safety apps, EHS software, compliance chatbots, workplace training tools.
+
+*For informational purposes only. Not legal advice.*
 startCommand:
   type: stdio
   configSchema:
