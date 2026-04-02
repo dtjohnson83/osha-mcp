@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-const RECEIVING_ADDRESS = '0x0b55C77eDC2592e38eBd008F82Cce694d3c49475'
+const RECEIVING_ADDRESS = '0x1cde2a1df9c3747b550fdea1558b093e8d0188e1'
 const FREE_DAILY_LIMIT = 3
 
 function getSupabaseConfig() {
@@ -115,7 +115,7 @@ function paymentRequired(remaining: number) {
 }
 
 async function executeLookup(body: Record<string, unknown>): Promise<unknown> {
-  const { tool, query, scope, employer_id, site_address, standard_number, violation_type } = body as any
+  const { tool, query, scope, employer_id, site_address, standard_number, violation_type, naics_code, industry, task } = body as any
   let result: any
 
   switch (tool) {
@@ -194,15 +194,47 @@ async function executeLookup(body: Record<string, unknown>): Promise<unknown> {
     }
 
     case 'check_applicability': {
+      // Try NAICS table first if naics_code provided
+      const lookupCode = naics_code || (body.naics_code as string) || ''
+      if (lookupCode) {
+        const naicsResult = await supabaseQuery('naics_standards', {
+          'naics_code': `eq.${lookupCode}`,
+          'limit': '1'
+        })
+        if (Array.isArray(naicsResult) && naicsResult.length > 0) {
+          result = naicsResult[0]
+          break
+        }
+      }
+      // Fall back to standards search
+      const searchTerm = lookupCode || industry || task || query || ''
       const appResult = await supabaseRpc('search_standards', {
-        search_query: query,
+        search_query: searchTerm,
         scope_filter: null,
         result_limit: 10
       })
       if (Array.isArray(appResult) && appResult.length > 0) {
         result = appResult
       } else {
-        result = await restKeywordSearch(query, null, 10)
+        result = await restKeywordSearch(searchTerm, null, 10)
+      }
+      break
+    }
+
+    case 'lookup_naics': {
+      const code = naics_code || (body.naics_code as string) || ''
+      if (!code) {
+        result = { error: 'naics_code required' }
+        break
+      }
+      const naicsResult = await supabaseQuery('naics_standards', {
+        'naics_code': `eq.${code.trim()}`,
+        'limit': '1'
+      })
+      if (Array.isArray(naicsResult) && naicsResult.length > 0) {
+        result = naicsResult[0]
+      } else {
+        result = { error: `NAICS code ${code} not found. Try: { tool: 'check_applicability', industry: 'welding shop' }` }
       }
       break
     }

@@ -4,7 +4,7 @@ AI-native API for OSHA safety regulation lookups. 479 standards with plain-Engli
 
 **Free tier:** 3 lookups/day per IP (no auth required)
 **Paid tier:** $0.01/call via x402 on Base L2
-**Wallet:** 0x0b55C77eDC2592e38eBd008F82Cce694d3c49475
+**Wallet:** 0x1cde2a1df9c3747b550fdea1558b093e8d0188e1
 **Standards:** 479 (188 General Industry + 291 Construction)
 **Data:** Last updated 2026-03-31. Penalty data current as of 2026-01-15.
 
@@ -61,12 +61,25 @@ Current OSHA penalty amounts by violation type.
 Violation types: serious, other_than_serious, willful, repeat, failure_to_abate, posting_requirements, all.
 
 ### check_applicability
-Determine which OSHA standards apply to an industry or task.
+Determine which OSHA standards apply to an industry, task, or NAICS code.
 
 Examples:
 - task: "scaffolding over 6 feet"
 - industry: "commercial construction"
-- naics_code: "236220"
+- naics_code: "236220" (commercial construction)
+- naics_code: "611519" (welding trade school)
+
+Returns NAICS-mapped standards when a NAICS code is provided. Falls back to keyword search for industry/task descriptions.
+
+### lookup_naics
+Look up a NAICS code and get its OSHA standards mapping.
+
+Examples:
+- naics_code: "611519" (welding trade school)
+- naics_code: "238210" (electrical contractors)
+- naics_code: "488390" (shipyard welding)
+
+Returns: industry description, applicable OSHA standards list, and expert notes on top hazards.
 
 ### get_standard_text
 Get full regulatory text + summary for a specific standard.
@@ -82,14 +95,24 @@ Examples:
 - Common violations: Based on OSHA enforcement data
 - Full text + plain-English summaries for all standards
 
-## Example Request
+## Example Requests
 
 ```json
+// Search by topic
 POST https://osha-mcp.vercel.app/api/lookup
-{
-  "tool": "lookup_standard",
-  "query": "welding respiratory protection"
-}
+{ "tool": "lookup_standard", "query": "welding respiratory protection" }
+
+// Exact standard
+{ "tool": "lookup_standard", "query": "1926.501" }
+
+// NAICS lookup
+{ "tool": "lookup_naics", "naics_code": "611519" }
+
+// Check applicability by industry
+{ "tool": "check_applicability", "industry": "welding trade school", "task": "shielded metal arc welding" }
+
+// Format a citation
+{ "tool": "format_citation", "standard_number": "1910.134" }
 ```
 
 ## Disclaimer
