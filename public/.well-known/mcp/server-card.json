@@ -1,29 +1,73 @@
 {
-  "name": "OSHA Compliance MCP",
-  "description": "Query OSHA safety standards (29 CFR 1910 & 1926) with plain-English summaries. Built for AI agents and compliance software developers.\n\nTools:\n- lookup_osha_standard: Search OSHA standards by topic, keyword, or section number\n- get_osha_requirements: Key requirements for a specific standard\n- get_penalty_info: OSHA penalty amounts by violation type\n- get_ppe_requirements: PPE requirements by task/hazard\n- check_applicability: Which standards apply to an industry or task\n- get_osha_citations: Full regulatory text and official citations\n\nData: 479 OSHA standards across 29 CFR 1910 (General Industry) and 1926 (Construction), with plain-English summaries, key requirements, and violation codes.\n\nUse cases: Safety apps, EHS software, compliance chatbots, workplace training tools.",
+  "serverInfo": {
+    "name": "osha-compliance",
+    "version": "1.0.0"
+  },
   "tools": [
-    { "name": "lookup_osha_standard", "description": "Search OSHA standards by topic, keyword, or section number" },
-    { "name": "get_osha_requirements", "description": "Key requirements for a specific standard" },
-    { "name": "get_penalty_info", "description": "OSHA penalty amounts by violation type" },
-    { "name": "get_ppe_requirements", "description": "PPE requirements by task/hazard" },
-    { "name": "check_applicability", "description": "Which standards apply to an industry or task" },
-    { "name": "get_osha_citations", "description": "Full regulatory text and official citations" }
-  ],
-  "usage": "smithery mcp add dtjohnson83/osha",
-  "repository": "https://github.com/dtjohnson83/osha-mcp",
-  "homepage": "https://osha-mcp.vercel.app",
-  "configSchema": {
-    "type": "object",
-    "properties": {
-      "SUPABASE_URL": {
-        "type": "string",
-        "description": "Supabase project URL"
-      },
-      "SUPABASE_ANON_KEY": {
-        "type": "string",
-        "description": "Supabase anonymous key"
+    {
+      "name": "lookup_osha_standard",
+      "description": "Search OSHA standards by topic, keyword, or section number",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "scope": { "type": "string" }
+        },
+        "required": ["query"]
       }
     },
-    "required": ["SUPABASE_URL", "SUPABASE_ANON_KEY"]
-  }
+    {
+      "name": "get_osha_requirements",
+      "description": "Key requirements for a specific OSHA standard",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "standard_number": { "type": "string" }
+        },
+        "required": ["standard_number"]
+      }
+    },
+    {
+      "name": "get_penalty_info",
+      "description": "OSHA penalty amounts by violation type",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "get_ppe_requirements",
+      "description": "PPE requirements by task or hazard",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "check_applicability",
+      "description": "Which OSHA standards apply to an industry or task",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "industry": { "type": "string" },
+          "task": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "get_osha_citations",
+      "description": "Full regulatory text and official citations",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "standard_number": { "type": "string" }
+        },
+        "required": ["standard_number"]
+      }
+    }
+  ]
 }
