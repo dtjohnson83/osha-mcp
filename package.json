@@ -20,7 +20,8 @@
     "validate": "tsx scripts/validate-data.ts",
     "setup-db": "tsx scripts/setup-db.ts",
     "seed-naics": "tsx scripts/seed-naics.ts",
-    "backfill": "tsx scripts/backfill-common-violations.ts"
+    "backfill": "tsx scripts/backfill-common-violations.ts",
+    "seed-ppe": "tsx scripts/seed-ppe.ts"
   },
   "keywords": [
     "osha",
