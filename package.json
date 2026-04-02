@@ -18,7 +18,9 @@
     "summarize": "tsx scripts/generate-summaries.ts",
     "seed-penalties": "tsx scripts/seed-penalties.ts",
     "validate": "tsx scripts/validate-data.ts",
-    "setup-db": "tsx scripts/setup-db.ts"
+    "setup-db": "tsx scripts/setup-db.ts",
+    "seed-naics": "tsx scripts/seed-naics.ts",
+    "backfill": "tsx scripts/backfill-common-violations.ts"
   },
   "keywords": [
     "osha",
