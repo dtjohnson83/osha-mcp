@@ -8,8 +8,8 @@ RUN npm ci --omit=dev
 # Copy server files
 COPY http-server.cjs ./
 
-ENV PORT=3000
+ENV PORT=8080
 ENV HOST=0.0.0.0
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["node", "http-server.cjs"]

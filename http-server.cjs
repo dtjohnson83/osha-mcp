@@ -8,7 +8,7 @@ const http = require("http");
 const url = require("url");
 const { createClient } = require("@supabase/supabase-js");
 
-const PORT = parseInt(process.env.PORT || "3000", 10);
+const PORT = parseInt(process.env.PORT || "8080", 10);
 const HOST = process.env.HOST || "0.0.0.0";
 
 // Supabase client
